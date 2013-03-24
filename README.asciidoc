@@ -1,0 +1,12 @@
+KIRSCHWASSER(7)
+===============
+slowpoke <mail+git@slowpoke.io>
+
+NAME
+----
+kirschwasser - a simple file indexer with tags and search
+
+DESCRIPTION
+-----------
+kirschwasser is a program to index large collections of files, e.g. images or
+music. 
