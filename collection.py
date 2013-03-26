@@ -52,3 +52,7 @@ class Collection:
     def untag_path(self, path, keyword):
         hash = self._index.get_hash(path)
         self._db.srem(self._tagkey(keyword), hash)
+
+    def list_tags(self):
+        return {keyword.decode() for keyword in
+                self._db.smembers(self._tagkey())}
