@@ -59,14 +59,15 @@ class Index:
 
     def _del_blob_by_path(self, path):
         if not self.has_path(path):
-            print("{0} not found.".format(path))
+            #print("{0} not found.".format(path))
             return
-        hash = self._get_hash(path)
+        hash = self.get_hash(path)
         self._db.delete(self._pathkey(path))
         self._db.srem(self._blobkey(hash), path)
 
     def _del_blob(self, hash):
         self._db.srem(self._blobkey(), hash)
 
-    def _get_hash(self, path):
+    def get_hash(self, path):
+        path = os.path.realpath(path)
         return self._db.get(self._pathkey(path)).decode()

@@ -27,7 +27,7 @@ class Collection:
     def __init__(self, name, db):
         self._name = name
         self._db = db
-        self.index = index.Index(name, db)
+        self._index = index.Index(name, db)
 
     def _tagkey(self, *args):
         return util.gen_key(self._name, 'tags', *args)
@@ -42,3 +42,13 @@ class Collection:
     def del_tag(self, keyword):
         '''Remove a tag from the collection.'''
         self._db.srem(self._tagkey(), keyword)
+
+    def tag_path(self, path, keyword):
+        if not self.has_tag(keyword):
+            self.add_tag(keyword)
+        hash = self._index.get_hash(path)
+        self._db.sadd(self._tagkey(keyword), hash)
+
+    def untag_path(self, path, keyword):
+        hash = self._index.get_hash(path)
+        self._db.srem(self._tagkey(keyword), hash)
