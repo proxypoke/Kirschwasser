@@ -39,8 +39,8 @@ class Index:
     def add_path(self, path):
         '''Add a file to the index.'''
         path = os.path.realpath(path)
-        self._db.sadd(self._pathkey(), path)
         self._add_blob_by_path(path)
+        self._db.sadd(self._pathkey(), path)
 
     def _add_blob_by_path(self, path):
         hash = util.hash_file(path)
@@ -69,5 +69,13 @@ class Index:
         self._db.srem(self._blobkey(), hash)
 
     def get_hash(self, path):
+        '''Get the hash of a path if it's already in the index.'''
         path = os.path.realpath(path)
         return self._db.get(self._pathkey(path)).decode()
+
+    def list_paths(self):
+        return {path.decode() for path in self._db.smembers(self._pathkey())}
+
+    def universe(self):
+        '''Get the set of all hashes.'''
+        return {hash.decode() for hash in self._db.smembers(self._blobkey())}
