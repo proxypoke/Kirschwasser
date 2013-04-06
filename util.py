@@ -57,5 +57,5 @@ def find(start_dir=".", dirs=True, files=True, filter='.*'):
         if files:
             for file in filenames:
                 if re.search(filter, file):
-                    result.append(file)
+                    result.append(os.sep.join([dirpath, file]))
     return result
