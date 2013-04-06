@@ -10,6 +10,7 @@
 
 import hashlib
 import os
+import re
 
 
 def gen_key(*args):
@@ -36,3 +37,25 @@ def hash_file(path, algo=hashlib.md5):
     hash_ = algo()
     hash_.update(file_.read())
     return hash_.hexdigest()
+
+
+def find(start_dir=".", dirs=True, files=True, filter='.*'):
+    '''Return a list of all files and/or directories contained by start_dir and
+    all its sub-directories.
+
+    Arguments:
+        start_dir -- the directory from which to search. Defaults to $PWD.
+        dirs -- include directories. Defaults to True.
+        files -- include regular (non-dir) files. Defaults to True.
+        filter -- a regexp to whitelist files. Default '.*'.
+    '''
+
+    result = []
+    for dirpath, _, filenames in os.walk(start_dir):
+        if dirs and re.search(filter, dirpath):
+            result.append(dirpath)
+        if files:
+            for file in filenames:
+                if re.search(filter, file):
+                    result.append(file)
+    return result
